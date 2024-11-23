@@ -12,7 +12,7 @@ from django.utils._os import safe_join
 from django.utils.http import http_date, parse_http_date
 from django.utils.translation import gettext as _
 from django.utils.translation import gettext_lazy
-
+from django.conf import settings # wch see RUNNING_DEVSERVER test to block message in production 
 
 def serve(request, path, document_root=None, show_indexes=False):
     """
@@ -31,6 +31,7 @@ def serve(request, path, document_root=None, show_indexes=False):
     ``static/directory_index.html``.
     """
     path = posixpath.normpath(path).lstrip("/")
+    if settings.RUNNING_DEVSERVER: print(f"static.serve {path} {__file__}") # wch see RUNNING_DEVSERVER test to block message in production
     fullpath = Path(safe_join(document_root, path))
     if fullpath.is_dir():
         if show_indexes:
